@@ -49,6 +49,8 @@ app.post('/download', function(req, res) {
 
 					photos.map(function(photoURL) {
 
+						console.log("Downloading...")
+
 						request({
 							'method': "GET",
 							'url': photoURL,
@@ -59,7 +61,7 @@ app.post('/download', function(req, res) {
 
 							if (!photoError && photoResponse.statusCode == 200) {
 
-								client.writeFile('CurrentDayTest/'+category+'/'+photoFileName, photoBody, function(photoDbError, photoDbStatus) {
+								client.writeFile('CurrentDay/'+category+'/'+photoFileName, photoBody, function(photoDbError, photoDbStatus) {
 									if (photoDbError) {
 										console.log("Dropbox Error on "+photoFileName);
 										console.log(photoDbError);
@@ -80,7 +82,7 @@ app.post('/download', function(req, res) {
 					})
 
 					// Write XML to File, Rebuilt from Object
-					client.writeFile('CurrentDayTest/'+category+'/'+xmlFileName, xmlBuilder.buildObject(xmlObj), function(dbError, dbStatus) {
+					client.writeFile('CurrentDay/'+category+'/'+xmlFileName, xmlBuilder.buildObject(xmlObj), function(dbError, dbStatus) {
 						if (dbError) {
 							console.log("Dropbox Error on "+category+".xml");
 							console.log(dbError);
