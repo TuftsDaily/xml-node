@@ -1,0 +1,78 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
+    <!-- <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css"> -->
+    <!-- <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+
+        <div id="articles-request" class="card">
+
+            <h3>Download Articles</h3>
+
+            <form>
+
+                <label for="section-name">Select Section:</label>
+                <select id="section-name">
+                    <option value=""></option>
+                    <option value="news">News</option>
+                    <option value="features">Features</option>
+                    <option value="arts">Arts</option>
+                    <option value="opinion">Opinion</option>
+                    <option value="sports">Sports</option>
+                </select>
+
+                <label for="print-date">Print Date:</label>
+                <input type="date" id="print-date" value="" />
+
+                <input type="button" id="do-download-button" class="actionbutton" value="Download" />
+
+            </form>
+        </div>
+
+        <div id="articles-list" class="card">
+
+            <h3>Articles Listing</h3>
+
+            <div class="table-wrapper">
+
+                <p id="download-result">Showing Articles in <strong>News</strong> for <strong>2015-11-10</strong>:</p>
+
+                <table>
+                    <thead>
+                        <tr><th>Title</th><th>Type</th><th>Photos</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Printing in the Digital Age: Behind the Scenes of The Tufts Daily</td><td>Article</td><td>1</td></tr>
+                        <tr><td>Ecofeminism for All</td><td>Column</td><td>0</td></tr>
+                    </tbody>
+                </table>
+
+                <p id="positive-result">These articles and associated photos will be downloaded to Dropbox momentarily.</p>
+
+                <input type="button" id="back-to-download-button" class="actionbutton" value="Back to Downloader" />
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.3.min.js"><\/script>')</script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
