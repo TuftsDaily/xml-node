@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Set Up Front-End Path
 app.use("/", express.static(__dirname+"/static"));
 
-// console.log(process.env);
+console.log(process.env);
 
 // Initialize Dropbox API Connection
 // TODO Don't Put Keys in Github
@@ -119,7 +119,7 @@ app.post('/download', function(req, res) {
 
 });
 
-var server = app.listen(SERVICE_PORT, function () {
+var server = app.listen(process.env.PORT || SERVICE_PORT, function () {
 	var host = server.address().address;
 	var port = server.address().port;
 	console.log('App Listening at http://%s:%s', host, port);
