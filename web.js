@@ -17,12 +17,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Set Up Front-End Path
 app.use("/", express.static(__dirname+"/static"));
 
+// console.log(process.env);
+
 // Initialize Dropbox API Connection
 // TODO Don't Put Keys in Github
 var client = new Dropbox.Client({
-	key: "",
-	secret: "",
-	token: ""
+	key: process.env.TD_DROPBOX_KEY,
+	secret: process.env.TD_DROPBOX_SECRET,
+	token: process.env.TD_DROPBOX_TOKEN
 });
 
 app.post('/download', function(req, res) {
