@@ -84,7 +84,7 @@ app.post('/download', function(req, res) {
 					})
 
 					// Write XML to File, Rebuilt from Object
-					client.writeFile('CurrentDay/'+category+'/'+xmlFileName, xmlBuilder.buildObject(xmlObj), function(dbError, dbStatus) {
+					client.writeFile('CurrentDay/'+category+'/'+xmlFileName, xmlBody, function(dbError, dbStatus) {
 						if (dbError) {
 							console.log("Dropbox Error on "+category+".xml");
 							console.log(dbError);
