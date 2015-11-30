@@ -51,8 +51,6 @@ app.post('/download', function(req, res) {
 
 					photos.map(function(photoURL) {
 
-						console.log("Downloading...")
-
 						request({
 							'method': "GET",
 							'url': photoURL,

@@ -5,11 +5,12 @@ $(document).ready(function() {
 	// Cache Elements
 	var $articlesRequestCard = $('#articles-request'),
 		$articlesListCard = $('#articles-list'),
+		$articlesErrorCard = $('#articles-error'),
 		$doDownloadButton = $('#do-download-button'),
-		$backToDownloadButton = $('#back-to-download-button'),
+		$backToDownloadButton = $('input.back-to-download-button'),
 		$articlesListTable = $articlesListCard.find('table'),
 		$articlesListDownloadResult = $articlesListCard.find('p#download-result'),
-		$articlesListPositiveResult = $articlesListCard.find('p#positive-result'),
+		$articleErrorText = $('#error-text'),
 		requestData = {};
 
 	// Show Request Card on Load
@@ -29,7 +30,7 @@ $(document).ready(function() {
 			data: requestData,
 			success: parseArticleData,
 			error: function(e) {
-				showDownloadError('No Response from Node Back-End');
+				showDownloadError('No Response from Server Back-End');
 			}
 		})
 
@@ -37,8 +38,11 @@ $(document).ready(function() {
 
 	$backToDownloadButton.click(function() {
 
+		console.log('click');
+
 		$articlesRequestCard.show(250);
 		$articlesListCard.hide(250);
+		$articlesErrorCard.hide(250);
 
 	})
 
@@ -58,7 +62,7 @@ $(document).ready(function() {
 		// Good ol' 105-Style Function Composition
 		var articleMapFunctionCompose = function(articleType) {
 			var articleMapFunction = function(article) {
-				var title = article.headline || article.columnhead || "<em>Missing Headline</em>";
+				var title = article.headline || article.columnhead || article.opinionhead || "<em>Missing Headline</em>";
 				var photo = article.photo || [];
 
 				var tr = $("<tr></tr>");
@@ -66,11 +70,13 @@ $(document).ready(function() {
 				tr.append("<td>"+articleType+"</td>");
 				tr.append("<td>"+photo.length+"</td>");
 				tr.appendTo($articlesListTable);
-				console.log(tr);
 
 			}
 			return articleMapFunction;
 		}
+
+		 // Get Rid of Everything but Table Header
+		$articlesListTable.find('tbody').html('');
 
 		articles.map(articleMapFunctionCompose("Article"));
 		column.map(articleMapFunctionCompose("Column"));
@@ -81,11 +87,19 @@ $(document).ready(function() {
 		// Change Visibility of Cards
 		$articlesRequestCard.hide(250);
 		$articlesListCard.show(250);
+		$articlesErrorCard.hide(250);
 
 	}
 
 	var showDownloadError = function(msg) {
-		console.log('ERROR', technical);
+
+		$articleErrorText.html(msg);
+
+		// Change Visibility of Cards
+		$articlesRequestCard.hide(250);
+		$articlesListCard.hide(250);
+		$articlesErrorCard.show(250);
+		
 	}
 
 	
