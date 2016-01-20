@@ -20,7 +20,6 @@ app.use("/", express.static(__dirname+"/static"));
 console.log(process.env);
 
 // Initialize Dropbox API Connection
-// TODO Don't Put Keys in Github
 var client = new Dropbox.Client({
 	key: process.env.TD_DROPBOX_KEY,
 	secret: process.env.TD_DROPBOX_SECRET,

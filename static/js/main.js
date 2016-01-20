@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-	// TODO Auto-Populate Date Form
-
 	// Cache Elements
 	var $articlesRequestCard = $('#articles-request'),
 		$articlesListCard = $('#articles-list'),
@@ -12,6 +10,14 @@ $(document).ready(function() {
 		$articlesListDownloadResult = $articlesListCard.find('p#download-result'),
 		$articleErrorText = $('#error-text'),
 		requestData = {};
+
+	// Get Tomorrow's Date, if After 3 AM
+	var d = new Date();
+	if (d.getHours() > 3) {
+		d.setDate(d.getDate() + 1)
+	}
+	// Then Set Input Accordingly
+	$articlesRequestCard.find('#print-date').val(d.toISOString().substring(0, 10));
 
 	// Show Request Card on Load
 	$articlesRequestCard.show(250);
