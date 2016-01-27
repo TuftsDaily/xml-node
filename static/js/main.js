@@ -16,8 +16,12 @@ $(document).ready(function() {
 	if (d.getHours() > 3) {
 		d.setDate(d.getDate() + 1)
 	}
+
+	// Create a YYYY-MM-DD String from the Date
+	var addZ = function(d) { return (d < 10) ? '0'+d : d; }
+	var dateString = d.getFullYear()+'-'+addZ(d.getMonth()+1)+'-'+addZ(d.getDate());
 	// Then Set Input Accordingly
-	$articlesRequestCard.find('#print-date').val(d.toISOString().substring(0, 10));
+	$articlesRequestCard.find('#print-date').val(dateString);
 
 	// Show Request Card on Load
 	$articlesRequestCard.show(250);
