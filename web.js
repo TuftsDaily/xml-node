@@ -35,7 +35,7 @@ app.post('/download', function(req, res) {
 
 	request({
 		'method': "GET",
-		'url': 'http://www.tuftsdaily.com/xml/category/'+category+'/date/'+date
+		'url': 'https://tuftsdaily.com/xml/category/'+category+'/date/'+date
 	}, function (xmlError, xmlResponse, xmlBody) {
 
 		if (!xmlError && xmlResponse.statusCode == 200) {
