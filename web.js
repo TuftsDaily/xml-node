@@ -17,25 +17,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Set Up Front-End Path
 app.use("/", express.static(__dirname+"/static"));
 
-console.log(process.env);
-
 // Initialize Dropbox API Connection
-var client = new Dropbox.Client({
-	key: process.env.TD_DROPBOX_KEY,
-	secret: process.env.TD_DROPBOX_SECRET,
-	token: process.env.TD_DROPBOX_TOKEN
+// An access token from Dropbox's developer website must be specified as an env variable
+var dbx = new Dropbox({
+	accessToken: process.env.TD_DROPBOX_TOKEN
 });
 
+// Handle POST requests to /download path
 app.post('/download', function(req, res) {
 
+	// Both of these should be inclued in the POST data
 	var category = req.body.section;
 	var date = req.body.date;
 
 	var xmlFileName = category+".xml";
+	var xmlUrl = 'https://tuftsdaily.com/xml/category/'+category+'/date/'+date;
 
 	request({
 		'method': "GET",
-		'url': 'https://tuftsdaily.com/xml/category/'+category+'/date/'+date
+		'url': xmlUrl
 	}, function (xmlError, xmlResponse, xmlBody) {
 
 		if (!xmlError && xmlResponse.statusCode == 200) {
@@ -56,18 +56,22 @@ app.post('/download', function(req, res) {
 							'encoding': null
 						}, function(photoError, photoResponse, photoBody) {
 
+							// Get the filename of the photo
 							var photoFileName = photoURL.substr(photoURL.lastIndexOf('/')+1);
 
 							if (!photoError && photoResponse.statusCode == 200) {
 
-								client.writeFile('CurrentDay/'+category+'/'+photoFileName, photoBody, function(photoDbError, photoDbStatus) {
-									if (photoDbError) {
-										console.log("Dropbox Error on "+photoFileName);
-										console.log(photoDbError);
-									} else {
-										console.log("Success Downloading Photo: "+photoFileName)
-									}
-								})
+								// Copy the photo contents to Dropbox
+								var photoPath = '/CurrentDay/' + category + '/' + photoFileName;
+								dbx.filesUpload({ path: photoPath, contents:photoBody, mode:'overwrite' })
+									.then(function(photoDbxResponse) {
+										console.log("Success Downloading Photo: " + photoPath)
+										console.log(photoDbxResponse);
+									})
+									.catch(function(photoDbxError) {
+										console.log("Dropbox Error on " + photoUrl);
+										console.log(photoDbxError);
+									});
 
 							} else {
 
@@ -80,13 +84,17 @@ app.post('/download', function(req, res) {
 
 					})
 
-					// Write XML to File, Rebuilt from Object
-					client.writeFile('CurrentDay/'+category+'/'+xmlFileName, xmlBody, function(dbError, dbStatus) {
-						if (dbError) {
-							console.log("Dropbox Error on "+category+".xml");
-							console.log(dbError);
-						}
-					});
+					// Save the original XML file to Dropbox
+					var xmlPath = '/CurrentDay/' + category + '/' + xmlFileName;
+					dbx.filesUpload({ path: xmlPath, contents: xmlBody, mode:'overwrite' })
+						.then(function(xmlDbxResponse) {
+							console.log("Success Downloading XML: " + xmlPath);
+							console.log(xmlDbxResponse);
+						})
+						.catch(function(xmlDbxError) {
+							console.log("Dropbox Error on " + xmlUrl);
+							console.log(xmlDbxError);
+						});
 
 					// Photos Downloaded in Background
 					console.log("Success Loading XML: "+xmlFileName);
@@ -106,7 +114,7 @@ app.post('/download', function(req, res) {
 
 		} else {
 
-			console.log("XML Get Error on "+xmlFileName);
+			console.log("XML Get Error on " + xmlUrl);
 			console.log(xmlError);
 			res.status(500);
 
